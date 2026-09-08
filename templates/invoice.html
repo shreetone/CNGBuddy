@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  @media print {
+    body {
+      background: #fff !important;
+    }
+    .no-print {
+      display: none !important;
+    }
+    .invoice-card {
+      box-shadow: none !important;
+      border: 1px solid #ddd;
+    }
+  }
+</style>
+
+<div class="row justify-content-center my-5">
+  <div class="col-md-8 col-lg-6">
+
+    <div class="card invoice-card shadow border-0 rounded-4 overflow-hidden">
+
+      <!-- HEADER -->
+      <div class="bg-dark text-white text-center py-4">
+        <h4 class="fw-bold mb-1">Booking Invoice</h4>
+        <small class="opacity-75">CNG Buddy • Smart Fuel Booking</small>
+      </div>
+
+      <div class="card-body p-4">
+
+        <!-- INVOICE META -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <span class="text-muted small">Booking ID</span>
+            <h6 class="fw-bold mb-0">{{ booking.id }}</h6>
+          </div>
+          <span class="badge bg-success px-3 py-2">
+            {{ booking.status|upper }}
+          </span>
+        </div>
+
+        <!-- CUSTOMER -->
+        <div class="mb-4">
+          <h6 class="fw-bold text-secondary mb-2">Customer Details</h6>
+          <div class="row small">
+            <div class="col-6"><b>Name:</b> {{ booking.user }}</div>
+            <div class="col-6"><b>Email:</b> {{ booking.email }}</div>
+            <div class="col-6 mt-1"><b>Phone:</b> {{ booking.phone }}</div>
+          </div>
+        </div>
+
+        <hr>
+
+        <!-- BOOKING DETAILS -->
+        <div class="mb-4">
+          <h6 class="fw-bold text-secondary mb-2">Booking Details</h6>
+
+          <div class="row small">
+            <div class="col-6"><b>Pump:</b> {{ booking.pump_name }}</div>
+            <div class="col-6"><b>Date:</b> {{ booking.date }}</div>
+            <div class="col-6 mt-1"><b>Time Slot:</b> {{ booking.time_slot }}</div>
+            <div class="col-6 mt-1">
+              <b>Vehicle:</b> {{ booking.vehicle_type }} ({{ booking.vehicle_number }})
+            </div>
+          </div>
+        </div>
+
+        <hr>
+
+        <!-- PAYMENT -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <span class="text-muted small">Payment Mode</span>
+            <h6 class="fw-bold mb-0">Cash on Delivery</h6>
+          </div>
+          <div class="text-end">
+            <span class="text-muted small">Total Amount</span>
+            <h4 class="fw-bold text-success mb-0">₹{{ booking.amount }}</h4>
+          </div>
+        </div>
+
+        <hr>
+
+        <!-- QR -->
+        <div class="text-center my-4">
+          <p class="fw-semibold mb-2">Scan QR at Pump</p>
+          <img src="data:image/png;base64,{{ qr_code }}"
+               class="border rounded p-2 bg-white"
+               width="180"
+               alt="QR Code">
+          <p class="text-muted small mt-2">
+            Show this QR code at the pump counter
+          </p>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="d-flex justify-content-between align-items-center mt-4 no-print">
+          <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary btn-sm">
+             Back to Dashboard
+          </a>
+
+          <button onclick="window.print()" class="btn btn-primary btn-sm">
+             Download / Print
+          </button>
+        </div>
+
+      </div>
+
+      <!-- FOOTER BAR -->
+      <div class="bg-light text-center py-2 small text-muted">
+        Thank you for using CNG Buddy 
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

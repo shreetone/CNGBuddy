@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Admin Dashboard</h2>
+
+<div class="row text-center mb-4">
+  <div class="col">Total Bookings: <b>{{ total_bookings }}</b></div>
+  <div class="col">Paid Bookings: <b>{{ total_paid }}</b></div>
+  <div class="col">Total Pumps: <b>{{ total_pumps }}</b></div>
+</div>
+
+<hr>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Pump</th>
+      <th>Date</th>
+      <th>Slot</th>
+      <th>Status</th>
+      <th>Vehicle</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for b in bookings %}
+    <tr>
+      <td>{{ b.user }}</td>
+      <td>{{ b.pump_name }}</td>
+      <td>{{ b.date }}</td>
+      <td>{{ b.time_slot }}</td>
+      <td>{{ b.status }}</td>
+      <td>{{ b.vehicle_number }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

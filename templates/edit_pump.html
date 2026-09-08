@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>Edit Pump</h3>
+
+<form method="post">
+  {% csrf_token %}
+
+  <input name="name" value="{{ pump.name }}" class="form-control mb-2">
+  <input name="address" value="{{ pump.address }}" class="form-control mb-2">
+  <input name="lat" value="{{ pump.lat }}" class="form-control mb-2">
+  <input name="lng" value="{{ pump.lng }}" class="form-control mb-2">
+  <input name="avg_service_time" value="{{ pump.avg_service_time }}" class="form-control mb-2">
+
+  <button class="btn btn-success">Update Pump</button>
+</form>
+
+{% endblock %}

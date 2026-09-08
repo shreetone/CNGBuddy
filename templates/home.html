@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- ================= HERO ================= -->
+<style>
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #e6f7f1, #f4fbff);
+}
+.hero::before, .hero::after {
+  content: "";
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  opacity: 0.35;
+  animation: float 8s infinite ease-in-out;
+}
+.hero::before { background:#28a745; top:-120px; left:-120px; }
+.hero::after  { background:#0d6efd; bottom:-120px; right:-120px; animation-delay:4s; }
+
+@keyframes float {
+  0%{transform:translateY(0)}
+  50%{transform:translateY(30px)}
+  100%{transform:translateY(0)}
+}
+
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s ease;
+}
+.scroll-animate.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+
+<div class="hero rounded-4 p-5 mb-5 shadow-sm text-center">
+  <h1 class="fw-bold mb-3">Smart CNG Pump Booking</h1>
+  <p class="text-muted fs-5 mb-4">
+    Avoid long queues. Book your CNG slot in advance.
+  </p>
+  <a href="#pumps" class="btn btn-success btn-lg rounded-pill px-4">
+    Find Nearby Pumps
+  </a>
+</div>
+
+<!-- ================= SEARCH RESULT HEADING ================= -->
+<div id="pumps">
+  {% if query %}
+    <h4 class="fw-bold text-center mb-4 scroll-animate">
+      Search results for "<span class="text-success">{{ query }}</span>"
+    </h4>
+  {% else %}
+    <h4 class="fw-bold text-center mb-4 scroll-animate">
+      Nearby CNG Pumps
+    </h4>
+  {% endif %}
+
+  <!-- ================= PUMPS LIST ================= -->
+  <div class="row g-4">
+
+  {% for p in pumps %}
+    <div class="col-md-4 scroll-animate">
+      <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+
+        <!-- ✅ IMAGE FIX (ALAG-ALAG IMAGES BACK) -->
+        <img src="{% if p.image %}{% static p.image %}{% else %}{% static 'default_pump.jpg' %}{% endif %}"
+             class="card-img-top"
+             style="height:200px; object-fit:cover;"
+             alt="{{ p.name }}">
+
+        <div class="card-body">
+          <h5 class="fw-bold mb-1">{{ p.name }}</h5>
+
+          <p class="text-muted small mb-1">
+            <i class="fa fa-location-dot me-1"></i>
+            {{ p.address }}
+          </p>
+
+          <!-- ⭐ Rating -->
+          <div class="mb-2">
+            {% if p.rating_count > 0 %}
+              <span class="text-warning">
+                {% for i in "12345" %}
+                  {% if forloop.counter <= p.rating|floatformat:0 %}
+                    <i class="fas fa-star"></i>
+                  {% else %}
+                    <i class="far fa-star"></i>
+                  {% endif %}
+                {% endfor %}
+              </span>
+              <small class="text-muted">
+                {{ p.rating }} ({{ p.rating_count }})
+              </small>
+            {% else %}
+              <small class="text-muted">No ratings yet</small>
+            {% endif %}
+          </div>
+
+          <a href="{% url 'pump_detail' p.mongo_id %}"
+             class="btn btn-outline-primary btn-sm rounded-pill">
+            View Details →
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  {% empty %}
+    <div class="col-12">
+      <p class="text-center text-muted fs-5 mt-4">
+        ❌ No pumps found{% if query %} for "<b>{{ query }}</b>"{% endif %}
+      </p>
+    </div>
+  {% endfor %}
+
+  </div>
+</div>
+
+<!-- ================= FEATURES ================= -->
+<div class="row text-center mt-5 g-4">
+  <div class="col-md-4 scroll-animate">
+    <div class="p-4 bg-white rounded-4 shadow-sm h-100">
+      <i class="fa fa-clock fa-2x text-success mb-3"></i>
+      <h6 class="fw-bold">Save Time</h6>
+      <p class="small text-muted">Book slots in advance</p>
+    </div>
+  </div>
+
+  <div class="col-md-4 scroll-animate">
+    <div class="p-4 bg-white rounded-4 shadow-sm h-100">
+      <i class="fa fa-map-location-dot fa-2x text-primary mb-3"></i>
+      <h6 class="fw-bold">Find Nearby Pumps</h6>
+      <p class="small text-muted">Easy location search</p>
+    </div>
+  </div>
+
+  <div class="col-md-4 scroll-animate">
+    <div class="p-4 bg-white rounded-4 shadow-sm h-100">
+      <i class="fa fa-receipt fa-2x text-warning mb-3"></i>
+      <h6 class="fw-bold">Digital Invoice</h6>
+      <p class="small text-muted">Instant billing</p>
+    </div>
+  </div>
+</div>
+
+<!-- ================= USER FEEDBACK ================= -->
+<hr class="my-5">
+
+<h3 class="text-center fw-bold mb-4">User Feedback</h3>
+
+{% if feedbacks %}
+<div class="row g-4">
+  {% for f in feedbacks %}
+  <div class="col-md-4">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+
+        <h6 class="fw-bold mb-1">
+          {{ f.username }}
+        </h6>
+
+        <p class="mb-1 text-warning">
+           {{ f.rating }}/5
+        </p>
+
+        <p class="text-muted small">
+          {{ f.comment }}
+        </p>
+
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p class="text-center text-muted">
+  No feedback available yet
+</p>
+{% endif %}
+
+<!-- ================= SCROLL JS ================= -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const els = document.querySelectorAll(".scroll-animate");
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add("show");
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  els.forEach(el => observer.observe(el));
+});
+</script>
+
+{% endblock %}

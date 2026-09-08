@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  /* ===== CARD ANIMATION ===== */
+  .register-card {
+    animation: fadeSlide 0.8s ease;
+    border-radius: 16px;
+  }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(25px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ICON */
+  .register-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    margin: 0 auto 10px;
+  }
+
+  /* 👇 INPUT SIZE FIX (MAIN PART) */
+  .register-card input,
+  .register-card select {
+    height: 44px;              /* 🔑 NOT TOO TALL */
+    border-radius: 10px;
+    font-size: 15px;
+  }
+
+  .register-card label {
+    font-size: 14px;
+  }
+
+  /* BUTTON */
+  .btn-register {
+    border-radius: 28px;
+    font-weight: 600;
+    padding: 10px;
+  }
+</style>
+
+<div class="row justify-content-center align-items-center" style="min-height:75vh;">
+  <div class="col-md-6 col-lg-4">
+
+    <div class="card shadow-lg border-0 register-card mt-4">
+      <div class="card-body p-4 p-md-4">
+
+        <!-- ICON -->
+        <div class="register-icon">
+          <i class="fas fa-user-plus"></i>
+        </div>
+
+        <!-- HEADING -->
+        <div class="text-center mb-3">
+          <h4 class="fw-bold mb-1">Create Account</h4>
+          <p class="text-muted small mb-0">
+            Join <strong>CNG Buddy</strong> 
+          </p>
+        </div>
+
+        <form method="post">
+          {% csrf_token %}
+
+          <!-- Username -->
+          <div class="mb-2">
+            <label class="form-label fw-semibold">Username</label>
+            {{ form.username }}
+          </div>
+
+          <!-- Email -->
+          <div class="mb-2">
+            <label class="form-label fw-semibold">Email Address</label>
+            <input type="email"
+                   name="email"
+                   class="form-control"
+                   placeholder="example@gmail.com"
+                   required>
+          </div>
+
+          <!-- Phone -->
+          <div class="mb-2">
+            <label class="form-label fw-semibold">Phone Number</label>
+            <input type="text"
+                   name="phone"
+                   class="form-control"
+                   placeholder="10 digit WhatsApp number"
+                   required>
+          </div>
+
+          <!-- Password -->
+          <div class="mb-2">
+            <label class="form-label fw-semibold">Password</label>
+            {{ form.password1 }}
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Confirm Password</label>
+            {{ form.password2 }}
+          </div>
+
+          <!-- BUTTON -->
+          <button class="btn btn-success w-100 btn-register">
+            Create Account
+          </button>
+        </form>
+
+        <!-- LOGIN LINK -->
+        <p class="text-center mt-3 mb-0 small">
+          Already registered?
+          <a href="{% url 'login' %}" class="fw-semibold text-decoration-none">
+            Login →
+          </a>
+        </p>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

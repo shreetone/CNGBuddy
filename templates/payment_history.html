@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3 class="mb-4">Payment History</h3>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Pump</th>
+      <th>Date</th>
+      <th>Slot</th>
+      <th>Amount</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for p in payments %}
+    <tr>
+      <td>{{ p.pump_name }}</td>
+      <td>{{ p.date }}</td>
+      <td>{{ p.time_slot }}</td>
+      <td>₹{{ p.amount }}</td>
+      <td><span class="badge bg-success">Paid</span></td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="5" class="text-center text-muted">
+        No payments yet
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

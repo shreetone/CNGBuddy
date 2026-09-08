@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- ================= HEADER ================= -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="fw-bold mb-0">
+    User Feedback
+  </h3>
+
+  <!-- 🔙 BACK TO ADMIN PANEL -->
+  <a href="{% url 'admin_pumps' %}"
+     class="btn btn-outline-secondary btn-sm">
+    ← Back to Admin Panel
+  </a>
+</div>
+
+<table class="table table-bordered align-middle table-hover">
+  <thead class="table-dark">
+    <tr>
+      <th>User</th>
+      <th>Rating</th>
+      <th>Comment</th>
+      <th>Status</th>
+      <th style="width:180px;">Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {% for f in feedbacks %}
+    <tr>
+      <td>{{ f.username }}</td>
+
+      <td class="text-warning fw-semibold">
+        {{ f.rating }}/5
+      </td>
+
+      <td>{{ f.comment }}</td>
+
+      <td>
+        {% if f.is_approved %}
+          <span class="badge bg-success">Approved</span>
+        {% else %}
+          <span class="badge bg-warning text-dark">Pending</span>
+        {% endif %}
+      </td>
+
+      <td>
+        {% if not f.is_approved %}
+          <a href="{% url 'approve_feedback' f.id %}"
+             class="btn btn-sm btn-success mb-1">
+            Approve
+          </a>
+        {% endif %}
+
+        <a href="{% url 'delete_feedback' f.id %}"
+           class="btn btn-sm btn-danger"
+           onclick="return confirm('Delete feedback?')">
+           Delete
+        </a>
+      </td>
+    </tr>
+  {% empty %}
+    <tr>
+      <td colspan="5" class="text-center text-muted">
+        No feedback found
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

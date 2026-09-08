@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+
+  <!-- TITLE -->
+  <div class="mb-4">
+    <h2 class="fw-bold">{{ pump.name }}</h2>
+    <p class="text-muted mb-0">{{ pump.location }}</p>
+  </div>
+
+  <!-- ⭐ RATING DISPLAY -->
+  <div class="mb-3">
+    {% if pump.rating_count > 0 %}
+      <span class="text-warning fw-semibold">
+        ⭐ {{ pump.rating }} / 5
+      </span>
+      <small class="text-muted">
+        ({{ pump.rating_count }} reviews)
+      </small>
+    {% else %}
+      <small class="text-muted">No ratings yet</small>
+    {% endif %}
+  </div>
+
+  <!-- MAP (SMALLER SIZE) -->
+  <div id="map"
+       class="rounded-4 shadow-sm mb-4"
+       style="height: 260px; width: 100%;"></div>
+
+  <!-- LIVE STATUS -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-body text-center">
+          <h6 class="text-muted mb-1">Vehicles in Queue</h6>
+          <h3 id="queue" class="fw-bold">{{ pump.queue|default:0 }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-body text-center">
+          <h6 class="text-muted mb-1">Avg Service Time</h6>
+          <h3 class="fw-bold">{{ pump.avg_service_time|default:5 }} min</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-body text-center">
+          <h6 class="text-muted mb-1">Est. Waiting Time</h6>
+          <h3 id="wait" class="fw-bold">
+            {{ pump.queue|default:0|add:"0" }} × {{ pump.avg_service_time|default:5 }} min
+          </h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⭐ RATE PUMP FORM -->
+  {% if user.is_authenticated %}
+    <div class="card shadow-sm border-0 mb-4">
+      <div class="card-body">
+        <h6 class="fw-semibold mb-2">Rate this pump</h6>
+
+        <form method="post" action="{% url 'rate_pump' pump.mongo_id %}">
+
+          {% csrf_token %}
+
+          <div class="d-flex gap-2 align-items-center">
+            <select name="rating" class="form-select w-auto" required>
+              <option value="">Select</option>
+              <option value="5">⭐⭐⭐⭐⭐</option>
+              <option value="4">⭐⭐⭐⭐</option>
+              <option value="3">⭐⭐⭐</option>
+              <option value="2">⭐⭐</option>
+              <option value="1">⭐</option>
+            </select>
+
+            <button class="btn btn-success btn-sm">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- ACTION BUTTONS -->
+  <div class="d-flex flex-wrap gap-3 mb-4">
+
+    <!-- DIRECTIONS -->
+    <a class="btn btn-primary"
+       href="https://www.google.com/maps/dir/?api=1&destination={{ pump.lat }},{{ pump.lng }}"
+       target="_blank">
+      Get Directions
+    </a>
+
+    <!-- BOOK -->
+    {% if user.is_authenticated %}
+      <a href="{% url 'book_pump' pump.mongo_id %}"
+         class="btn btn-success">
+        Book Slot
+      </a>
+    {% else %}
+      <a href="{% url 'login' %}"
+         class="btn btn-outline-secondary">
+        Login to Book
+      </a>
+    {% endif %}
+
+  </div>
+
+</div>
+
+<!-- ================= GOOGLE MAP ================= -->
+<script>
+function initMap() {
+  const location = {
+    lat: {{ pump.lat }},
+    lng: {{ pump.lng }}
+  };
+
+  const map = new google.maps.Map(
+    document.getElementById("map"),
+    {
+      zoom: 15,
+      center: location
+    }
+  );
+
+  new google.maps.Marker({
+    position: location,
+    map: map
+  });
+}
+</script>
+
+<!-- ================= LIVE QUEUE UPDATE ================= -->
+<script>
+setInterval(() => {
+  fetch("{% url 'pump_queue' pump.mongo_id %}")
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("queue").innerText = data.queue;
+      document.getElementById("wait").innerText =
+        (data.queue * data.avg_service_time) + " min";
+    });
+}, 5000);
+</script>
+
+<script
+  src="https://maps.googleapis.com/maps/api/js?key={{ google_key }}&callback=initMap"
+  async defer>
+</script>
+
+{% endblock %}

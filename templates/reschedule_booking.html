@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-md-5">
+
+    <div class="card shadow border-0 rounded-4 p-4">
+      <h4 class="fw-bold mb-3">Reschedule Booking</h4>
+
+      <p><b>Pump:</b> {{ booking.pump_name }}</p>
+      <p><b>Current Slot:</b> {{ booking.date }} | {{ booking.time_slot }}</p>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <label class="fw-semibold">New Date</label>
+        <input type="date"
+               name="date"
+               class="form-control mb-3"
+               min="{{ today }}"
+               required>
+
+        <label class="fw-semibold">New Time Slot</label>
+        <select name="time_slot" class="form-control mb-3" required>
+          <option value="">-- Select Slot --</option>
+          {% for s in slots %}
+            <option value="{{ s }}">{{ s }}</option>
+          {% endfor %}
+        </select>
+
+        <button class="btn btn-warning w-100">
+          Update Booking
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

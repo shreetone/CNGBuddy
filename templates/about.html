@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  /* ===== PAGE ANIMATION ===== */
+  .fade-up {
+    animation: fadeUp 0.8s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== FEATURE CARD COLORS ===== */
+  .feature-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 18px;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 36px rgba(0,0,0,0.15);
+  }
+
+  /* individual soft gradients */
+  .card-green {
+    background: linear-gradient(135deg, #e6f7f1, #ffffff);
+  }
+
+  .card-blue {
+    background: linear-gradient(135deg, #eaf2ff, #ffffff);
+  }
+
+  .card-yellow {
+    background: linear-gradient(135deg, #fff7e6, #ffffff);
+  }
+
+  .card-purple {
+    background: linear-gradient(135deg, #f3e8ff, #ffffff);
+  }
+
+  .card-red {
+    background: linear-gradient(135deg, #ffeaea, #ffffff);
+  }
+
+  /* FAQ */
+  .accordion-button {
+    font-size: 15px;
+  }
+</style>
+
+<!-- ================= ABOUT SECTION ================= -->
+<section class="mb-5 fade-up">
+
+  <!-- HEADER -->
+  <div class="text-center mb-5">
+    <h2 class="fw-bold display-6">
+      About <span class="text-success">CNG Buddy</span>
+    </h2>
+    <p class="lead text-muted mt-3 px-md-5">
+      CNG Buddy is a smart fuel management platform designed to reduce waiting time
+      at CNG stations and make refueling faster, easier, and smarter.
+    </p>
+  </div>
+
+  <!-- WHY + SOLUTION -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm border-0 rounded-4 fade-up card-red">
+        <div class="card-body p-4">
+          <h5 class="fw-bold mb-3">Why CNG Buddy?</h5>
+          <ul class="list-unstyled text-muted mb-0">
+            <li class="mb-2">Long queues waste time and fuel</li>
+            <li class="mb-2">No visibility of pump crowd status</li>
+            <li>Unplanned refueling causes delays</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm border-0 rounded-4 fade-up card-green">
+        <div class="card-body p-4">
+          <h5 class="fw-bold mb-3">Our Solution</h5>
+          <p class="text-muted mb-0">
+            CNG Buddy provides <strong>live queue updates</strong>,
+            <strong>nearest pump discovery</strong>,
+            and <strong>advance booking</strong> for stress-free refueling.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="mt-5">
+    <h4 class="fw-bold text-center mb-4">Key Features</h4>
+
+    <div class="row g-4 text-center">
+
+      <div class="col-md-4">
+        <div class="p-4 feature-card h-100 card-blue">
+          <h6 class="fw-bold mt-2">Nearest Pump Locator</h6>
+          <p class="small text-muted mb-0">
+            Find nearby CNG pumps instantly
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="p-4 feature-card h-100 card-green">
+          <h6 class="fw-bold mt-2">Live Queue Status</h6>
+          <p class="small text-muted mb-0">
+            Know waiting time before reaching
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="p-4 feature-card h-100 card-yellow">
+          <h6 class="fw-bold mt-2">Slot Booking</h6>
+          <p class="small text-muted mb-0">
+            Book refueling slots in advance
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="p-4 feature-card h-100 card-purple">
+          <h6 class="fw-bold mt-2">Secure Payments</h6>
+          <p class="small text-muted mb-0">
+            Fast and safe online payments
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="p-4 feature-card h-100 card-blue">
+          <h6 class="fw-bold mt-2">Admin Analytics</h6>
+          <p class="small text-muted mb-0">
+            Monitor queues, revenue & usage
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MISSION -->
+  <div class="mt-5 text-center fade-up">
+    <h4 class="fw-bold mb-3">Our Mission</h4>
+    <p class="text-muted px-md-5">
+      Our mission is to make CNG refueling stress-free, efficient,
+      and time-saving for millions of CNG vehicle users across India.
+    </p>
+  </div>
+
+</section>
+
+<!-- ================= FAQ SECTION ================= -->
+<section class="mt-5 fade-up">
+  <h3 class="fw-bold text-center mb-4">
+    Frequently Asked Questions
+  </h3>
+
+  <div class="accordion accordion-flush shadow-sm rounded-4"
+       id="faqAccordion">
+
+    {% for f in faqs %}
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-semibold"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#faq{{ forloop.counter }}">
+          {{ f.question }}
+        </button>
+      </h2>
+
+      <div id="faq{{ forloop.counter }}"
+           class="accordion-collapse collapse"
+           data-bs-parent="#faqAccordion">
+        <div class="accordion-body text-muted">
+          {{ f.answer }}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+</section>
+
+{% endblock %}

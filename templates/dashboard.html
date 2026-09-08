@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="text-center mb-4">
+  <h2 class="fw-bold">Your Bookings</h2>
+  <p class="text-muted">Manage your CNG slot bookings & invoices</p>
+</div>
+
+{% if bookings %}
+<div class="row g-4">
+
+  {% for b in bookings %}
+  <div class="col-md-6">
+    <div class="card shadow-sm border-0 rounded-4 h-100">
+      <div class="card-body p-4">
+
+        <!-- Pump Name -->
+        <h5 class="fw-bold mb-2">{{ b.pump_name }}</h5>
+
+        <!-- Status -->
+        <p class="mb-2">
+          <strong>Status:</strong>
+          <span class="badge
+            {% if b.status == 'paid' %}
+              bg-success
+            {% elif b.status == 'pending_payment' %}
+              bg-warning text-dark
+            {% else %}
+              bg-secondary
+            {% endif %}
+          ">
+            {{ b.status|title }}
+          </span>
+        </p>
+
+        <hr>
+
+        <!-- Booking Info -->
+        <p class="mb-1"><b>Date:</b> {{ b.date }}</p>
+        <p class="mb-1"><b>Time:</b> {{ b.time_slot }}</p>
+        <p class="mb-1">
+          <b>Vehicle:</b> {{ b.vehicle_type }} – {{ b.vehicle_number }}
+        </p>
+        <p class="mb-3"><b>Amount:</b> ₹{{ b.amount }}</p>
+
+        <!-- Actions -->
+        <div class="d-flex gap-2 flex-wrap">
+
+          {% if b.status == "pending_payment" %}
+            <a href="{% url 'payment' b.id %}"
+               class="btn btn-warning btn-sm">
+              Pay Now
+            </a>
+          {% endif %}
+
+          {% if b.status == "paid" %}
+            <a href="{% url 'invoice' b.booking_id %}"
+               class="btn btn-outline-dark btn-sm">
+              Invoice
+            </a>
+
+            <a href="{% url 'reschedule_booking' b.booking_id %}"
+               class="btn btn-outline-warning btn-sm">
+               Reschedule
+            </a>
+
+            <a href="{% url 'cancel_booking' b.booking_id %}"
+               class="btn btn-outline-danger btn-sm"
+               onclick="return confirm('Cancel booking?')">
+              Cancel
+            </a>
+          {% endif %}
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
+
+<!-- Payment History -->
+<div class="text-center mt-4">
+  <a href="{% url 'payment_history' %}" class="btn btn-outline-primary">
+    View Payment History
+  </a>
+</div>
+
+{% else %}
+<div class="alert alert-info text-center shadow-sm">
+  <strong>No bookings yet.</strong><br>
+  Book a CNG slot to see your bookings here 🚗⛽
+</div>
+{% endif %}
+
+{% endblock %}

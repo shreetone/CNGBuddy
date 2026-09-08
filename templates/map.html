@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3 class="fw-bold mb-3">Nearby CNG Pumps</h3>
+
+<div id="map" style="height: 500px; width: 100%;"
+     class="rounded shadow-sm"></div>
+
+<script>
+function initMap() {
+
+  const center = { lat: 19.0760, lng: 72.8777 }; // Default Mumbai
+
+  const map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 12,
+    center: center
+  });
+
+  const pumps = [
+    {% for p in pumps %}
+    {
+      name: "{{ p.name }}",
+      lat: {{ p.lat }},
+      lng: {{ p.lng }},
+      address: "{{ p.address }}"
+    },
+    {% endfor %}
+  ];
+
+  pumps.forEach(pump => {
+    const marker = new google.maps.Marker({
+      position: { lat: pump.lat, lng: pump.lng },
+      map: map,
+      title: pump.name
+    });
+
+    const info = new google.maps.InfoWindow({
+      content: `
+        <strong>${pump.name}</strong><br>
+        ${pump.address}
+      `
+    });
+
+    marker.addListener("click", () => {
+      info.open(map, marker);
+    });
+  });
+}
+</script>
+
+<script
+  src="https://maps.googleapis.com/maps/api/js?key={{ google_key }}&callback=initMap"
+  async defer>
+</script>
+
+{% endblock %}

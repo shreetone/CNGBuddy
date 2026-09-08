@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  .terms-card {
+    border-radius: 16px;
+    background: #ffffff;
+  }
+
+  .terms-header {
+    background: linear-gradient(135deg, #212529, #343a40);
+    color: #fff;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .terms-icon {
+    width: 45px;
+    height: 45px;
+    background: #f1f3f5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #212529;
+  }
+
+  .terms-section {
+    margin-bottom: 28px;
+  }
+</style>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-9 col-md-11">
+
+      <div class="card shadow-lg border-0 terms-card">
+
+        <!-- HEADER -->
+        <div class="terms-header text-center py-4">
+          <h2 class="fw-bold mb-1">Terms & Conditions</h2>
+          <p class="mb-0 small opacity-75">
+            Please read carefully before using our services
+          </p>
+        </div>
+
+        <!-- BODY -->
+        <div class="card-body p-4 p-md-5">
+
+          <!-- INTRO -->
+          <p class="fs-6">
+            By accessing or using <strong>CNG Buddy</strong>, you agree to comply
+            with and be bound by the following Terms & Conditions.
+          </p>
+
+          <hr class="my-4">
+
+          <!-- SECTION 1 -->
+          <div class="terms-section">
+            <div class="d-flex align-items-center mb-2">
+              <h5 class="fw-bold mb-0">1. Service Usage</h5>
+            </div>
+            <p class="mb-0">
+              CNG Buddy provides CNG pump slot booking and queue information.
+              Availability may vary depending on pump operations and demand.
+            </p>
+          </div>
+
+          <!-- SECTION 2 -->
+          <div class="terms-section">
+            <div class="d-flex align-items-center mb-2">
+              <h5 class="fw-bold mb-0">2. Payments</h5>
+            </div>
+            <p class="mb-0">
+              All payments made through the platform are non-refundable unless
+              explicitly stated otherwise.
+            </p>
+          </div>
+
+          <!-- SECTION 3 -->
+          <div class="terms-section">
+            <div class="d-flex align-items-center mb-2">
+              <h5 class="fw-bold mb-0">3. User Responsibility</h5>
+            </div>
+            <p class="mb-0">
+              Users are responsible for providing accurate vehicle, contact,
+              and booking details. Incorrect information may result in booking
+              cancellation.
+            </p>
+          </div>
+
+          <!-- SECTION 4 -->
+          <div class="terms-section">
+            <div class="d-flex align-items-center mb-2">
+              
+              <h5 class="fw-bold mb-0">4. Changes to Terms</h5>
+            </div>
+            <p class="mb-0">
+              CNG Buddy reserves the right to update or modify these terms at any
+              time without prior notice.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

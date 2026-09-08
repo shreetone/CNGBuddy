@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  /* ===== CONTACT PAGE STYLING ===== */
+  .contact-card {
+    border-radius: 18px;
+    animation: fadeUp 0.7s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .contact-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #28a745, #20c997);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 28px;
+    margin: 0 auto 12px;
+  }
+
+  .contact-card input,
+  .contact-card textarea {
+    border-radius: 12px;
+    font-size: 15px;
+  }
+
+  .contact-card input {
+    height: 46px;
+  }
+
+  .contact-card textarea {
+    resize: none;
+  }
+
+  .btn-contact {
+    border-radius: 30px;
+    font-weight: 600;
+    padding: 11px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-contact:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(40, 167, 69, 0.35);
+  }
+</style>
+
+<div class="row justify-content-center align-items-center" style="min-height:75vh;">
+  <div class="col-md-7 col-lg-5">
+
+    <div class="card shadow-lg border-0 contact-card mt-4">
+      <div class="card-body p-4 p-md-4">
+
+        <!-- HEADER -->
+        <div class="text-center mb-3">
+          <div class="contact-icon">
+            <i class="fas fa-envelope-open-text"></i>
+          </div>
+          <h4 class="fw-bold mb-1">Contact Us</h4>
+          <p class="text-muted small mb-0">
+            We’d love to hear from you. Send us your query anytime.
+          </p>
+        </div>
+
+        <!-- SUCCESS MESSAGE -->
+        {% if messages %}
+          {% for msg in messages %}
+            <div class="alert alert-success text-center py-2">
+              {{ msg }}
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <!-- FORM -->
+        <form method="post">
+          {% csrf_token %}
+
+          <!-- NAME -->
+          <div class="mb-2">
+            <label class="form-label fw-semibold">Your Name</label>
+            <input type="text"
+                   name="name"
+                   class="form-control"
+                   placeholder="Enter your full name"
+                   required>
+          </div>
+
+          <!-- EMAIL -->
+          <div class="mb-2">
+            <label class="form-label fw-semibold">Email Address</label>
+            <input type="email"
+                   name="email"
+                   class="form-control"
+                   placeholder="example@gmail.com"
+                   required>
+          </div>
+
+          <!-- MESSAGE -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Message</label>
+            <textarea name="message"
+                      class="form-control"
+                      rows="4"
+                      placeholder="Write your message here..."
+                      required></textarea>
+          </div>
+
+          <!-- BUTTON -->
+          <button class="btn btn-success w-100 btn-contact">
+             Send Message
+          </button>
+        </form>
+
+        <!-- FOOT NOTE -->
+        <p class="text-center text-muted small mt-3 mb-0">
+          Our support team will respond within 24 hours.
+        </p>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

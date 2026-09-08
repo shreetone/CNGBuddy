@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row justify-content-center mt-4">
+  <div class="col-md-8 col-lg-6 col-xl-5">
+
+    <div class="card shadow-sm border-0 rounded-4">
+
+      <!-- Header -->
+      <div class="card-header bg-primary text-white py-3 rounded-top-4">
+        <h5 class="mb-0 fw-bold">
+          <i class="fas fa-user me-2"></i> My Profile
+        </h5>
+        <small class="text-white-50">Manage your preferences</small>
+      </div>
+
+      <div class="card-body p-4">
+
+        <!-- User Info -->
+        <div class="row g-3 mb-4">
+          <div class="col-6">
+            <div class="p-3 border rounded bg-light">
+              <small class="text-muted">Username</small>
+              <div class="fw-semibold">{{ request.user.username }}</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-3 border rounded bg-light">
+              <small class="text-muted">Email</small>
+              <div class="fw-semibold">{{ request.user.email }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <form method="post">
+          {% csrf_token %}
+
+          <!-- Phone -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">
+              <i class="fab fa-whatsapp text-success me-1"></i> WhatsApp Number
+            </label>
+            <input type="text"
+                   name="phone"
+                   value="{{ profile.phone }}"
+                   class="form-control"
+                   placeholder="10 digit number"
+                   required>
+          </div>
+
+          <!-- Notifications -->
+          <div class="border rounded bg-light p-3 mb-4">
+            <h6 class="fw-semibold mb-3">
+              <i class="fas fa-bell text-warning me-1"></i> Notifications
+            </h6>
+
+            <div class="form-check form-switch mb-2">
+              <input class="form-check-input"
+                     type="checkbox"
+                     name="whatsapp_alert"
+                     {% if profile.whatsapp_alert %}checked{% endif %}>
+              <label class="form-check-label">
+                WhatsApp Reminders
+              </label>
+            </div>
+
+            <div class="form-check form-switch">
+              <input class="form-check-input"
+                     type="checkbox"
+                     name="email_alert"
+                     {% if profile.email_alert %}checked{% endif %}>
+              <label class="form-check-label">
+                Email Reminders
+              </label>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="d-flex justify-content-between border-top pt-3">
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary btn-sm">
+              Back
+            </a>
+            <button type="submit" class="btn btn-primary btn-sm px-4">
+              Save
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Font Awesome -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+{% endblock %}
